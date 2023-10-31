@@ -1,6 +1,6 @@
 const Booking = require('../model/Booking');
 const Room = require('../model/Room');
-
+const uuid = require('uuid');
 exports.bookRoom = async (req, res) => {
   try {
 
@@ -47,6 +47,7 @@ exports.bookRoom = async (req, res) => {
 
     // Create a new booking
     const newBooking = new Booking({
+      bookingId: uuid.v4(),
       userEmail,
       roomNumber,
       startTime,
