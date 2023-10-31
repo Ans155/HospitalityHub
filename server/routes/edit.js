@@ -7,6 +7,6 @@ const editController = require('../controllers/editController');
  * @description Edit a booking
  * @access public
  */
-router.put('/', editController.editBooking);
+router.put('/:bookingId', editController.editBooking);
 
 module.exports = router;
