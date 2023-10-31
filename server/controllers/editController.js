@@ -1,54 +1,76 @@
 const Booking = require('../model/Booking');
 const Room = require('../model/Room');
+const { v4: uuidv4 } = require('uuid'); 
 
-// Edit a booking
+const hasOverlap = (booking1, booking2) => {
+  return (
+    (booking1.startTime < booking2.endTime && booking1.endTime > booking2.startTime) ||
+    (booking2.startTime < booking1.endTime && booking2.endTime > booking1.startTime)
+  );
+};
+
 exports.editBooking = async (req, res) => {
   try {
-    console.log(req.params.bookingId);
-    const { userEmail, roomNumber, startTime, endTime, price} = req.body;
-    // Check if the room exists
-    const room = await Room.findOne({ roomNumber });
+
+    const { bookingId } = req.params;
+
+    const booking = await Booking.findOne({ bookingId });
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    const roomNumber = booking.roomNumber;
+
+    const room = await Room.findOne({ roomNumber: req.body.roomNumber });
 
     if (!room) {
       return res.status(404).json({ error: 'Room not found' });
     }
 
-    // Check for overlapping bookings for the same room
     const overlappingBooking = await Booking.findOne({
-      roomNumber,
+      roomNumber: req.body.roomNumber,
+      bookingId: { $ne: bookingId }, 
       $or: [
         {
-          startTime: { $lt: endTime },
-          endTime: { $gt: startTime },
+          startTime: { $lt: new Date(req.body.endTime) },
+          endTime: { $gt: new Date(req.body.startTime) },
+        },
+        {
+          startTime: { $lt: new Date(req.body.endTime) },
+          endTime: { $gt: new Date(req.body.startTime) },
         },
       ],
-      _id: { $ne: req.params.id }, // Exclude the current booking from the check
     });
 
     if (overlappingBooking) {
       return res.status(400).json({ error: 'Overlapping booking exists' });
     }
 
-    // Calculate the price based on the hourly rate and updated duration
-    // const hourlyRate = room.hourlyRate;
-    // const durationInHours = (endTime - startTime) / 1000 / 60 / 60;
-    // const price = hourlyRate * durationInHours;
 
-    // Update the booking
-    const updatedBooking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      {
-        userEmail,
-        roomNumber,
-        startTime,
-        endTime,
-        price,
-      },
-      { new: true }
-    );
+    if (req.body.userEmail) {
+      booking.userEmail = req.body.userEmail;
+    }
 
-    res.status(200).json(updatedBooking);
-    console.log("Successfull")
+    if (req.body.roomNumber) {
+      booking.roomNumber = req.body.roomNumber;
+    }
+
+    if (req.body.startTime) {
+      booking.startTime = new Date(req.body.startTime);
+    }
+
+    if (req.body.endTime) {
+      booking.endTime = new Date(req.body.endTime);
+    }
+
+    const hourlyRate = room.hourlyRate;
+    const durationInHours = (booking.endTime - booking.startTime) / 1000 / 60 / 60;
+    booking.price = hourlyRate * durationInHours;
+
+    await booking.save();
+
+    res.status(200).json(booking);
   } catch (error) {
     console.error('Error editing booking:', error);
     res.status(500).json({ error: 'Failed to edit booking' });
