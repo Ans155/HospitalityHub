@@ -1,6 +1,6 @@
 require("dotenv").config(); //added
 const express = require("express");
-const connectDB = require("./config/db"); //added
+const connectDB = require("./config/db");
 //const bookRoute = require('./routes/create'); // Import the route file
 const routes =require("./routes/create")
 const editRoute = require('./routes/edit');
