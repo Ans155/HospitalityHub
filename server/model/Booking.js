@@ -10,6 +10,10 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  roomType :{
+    type: String,
+    required: false,
+  },
   roomNumber: {
     type: Number,
     required: true,
