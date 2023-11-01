@@ -64,9 +64,9 @@ exports.editBooking = async (req, res) => {
       booking.endTime = new Date(req.body.endTime);
     }
 
-    const hourlyRate = room.hourlyRate;
-    const durationInHours = (booking.endTime - booking.startTime) / 1000 / 60 / 60;
-    booking.price = hourlyRate * durationInHours;
+    // const hourlyRate = room.hourlyRate;
+    // const durationInHours = (booking.endTime - booking.startTime) / 1000 / 60 / 60;
+    // booking.price = hourlyRate * durationInHours;
 
     await booking.save();
 
