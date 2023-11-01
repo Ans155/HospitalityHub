@@ -10,7 +10,7 @@ exports.viewBookings = async (req, res) => {
       return res.status(200).json({ bookings: [] });
     }
 
-    res.status(200).json({ bookings });
+    res.status(200).json(bookings);
   } catch (error) {
     console.error('Error fetching bookings:', error);
     res.status(500).json({ error: 'Failed to fetch bookings' });
