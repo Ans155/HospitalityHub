@@ -8,7 +8,6 @@ exports.bookRoom = async (req, res) => {
 
     // Check if the room exists
     const room = await Room.findOne({ roomNumber });
-
     if (!room)
     {
       return res.status(404).json({ error: 'Room not found' });
