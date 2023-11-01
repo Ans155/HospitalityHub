@@ -4,6 +4,8 @@ const connectDB = require("./config/db");
 //const bookRoute = require('./routes/create'); // Import the route file
 const routes =require("./routes/create")
 const editRoute = require('./routes/edit');
+const deleteRoute = require("./routes/delete");
+const viewRoute = require("./routes/view");
 const app = express();
 // connect database
 connectDB();//added
@@ -12,6 +14,8 @@ app.use(express.json({ extended: false }));
 //app.get("/", (req, res) => res.send("Server up and running"));
 app.use('/create', routes);
 app.use('/edit', editRoute);
+app.use('/delete', deleteRoute);
+app.use('/view', viewRoute);
 // setting up port
 const PORT = process.env.PORT || 5000;
 
