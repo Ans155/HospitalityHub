@@ -4,7 +4,7 @@ const uuid = require('uuid');
 exports.bookRoom = async (req, res) => {
   try {
 
-    const { userEmail, roomNumber, startTime, endTime, price } = req.body;
+    const { userEmail, roomType, roomNumber, startTime, endTime, price } = req.body;
 
     // Check if the room exists
     const room = await Room.findOne({ roomNumber });
@@ -48,10 +48,12 @@ exports.bookRoom = async (req, res) => {
     const newBooking = new Booking({
       bookingId: uuid.v4(),
       userEmail,
+      roomType,
       roomNumber,
       startTime,
       endTime,
       price,
+      roomType,
     });
 
     await newBooking.save();
