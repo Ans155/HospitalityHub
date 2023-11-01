@@ -55,6 +55,9 @@ exports.editBooking = async (req, res) => {
     if (req.body.roomNumber) {
       booking.roomNumber = req.body.roomNumber;
     }
+    if (req.body.roomType) {
+      booking.roomType = req.body.roomType;
+    }
 
     if (req.body.startTime) {
       booking.startTime = new Date(req.body.startTime);
