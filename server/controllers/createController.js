@@ -31,20 +31,6 @@ exports.bookRoom = async (req, res) => {
     if (overlappingBooking) {
       return res.status(400).json({ error: 'Overlapping booking exists' });
     }
-  //     const startDate = new Date(startTime);
-  // const endDate = new Date(endTime);
-
-  // // Calculate the time difference in milliseconds
-  // const timeDiff = endDate - startDate;
-
-  // // Calculate the number of hours
-  // const hours = timeDiff / (1000 * 60 * 60);
-    // Calculate the price based on the hourly rate and duration
-    // const hourlyRate = room.hourlyRate;
-    // const durationInHours = (endTime - startTime) / 1000 / 60 / 60;
-    // const price = hourlyRate * durationInHours;
-
-    // Create a new booking
     const newBooking = new Booking({
       bookingId: uuid.v4(),
       userEmail,
