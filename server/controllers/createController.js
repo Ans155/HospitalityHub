@@ -24,6 +24,7 @@
 //       `,
 //   });
 
+
 //   console.log(info.messageId); // Random ID generated after a successful send (optional)
 // }
 
@@ -162,7 +163,8 @@ exports.bookRoom = async (req, res) => {
     await newBooking.save();
 
     // Send a confirmation email
-    await sendConfirmationEmail(userEmail, roomNumber, price);
+    a
+    wait sendConfirmationEmail(userEmail, roomNumber, price);
 
     res.status(201).json(newBooking);
   } catch (error) {
