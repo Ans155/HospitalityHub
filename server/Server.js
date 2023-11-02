@@ -26,7 +26,7 @@ app.use('/viewRoom', viewRoomRoute);
 app.use('/filter', filterRoute);
 // setting up port
 const BASE_URL = process.env.BASE_URL;
-const PORT =process.env.PORT
+const PORT =process.env.PORT || 5000
 
 app.listen(PORT, () => {
     console.log(`server is running on ${BASE_URL}`);
