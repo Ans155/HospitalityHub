@@ -18,27 +18,33 @@ function BookingCard({ booking }) {
     currency: "INR",
   });
   return (
-    <Card style={{ width: "25rem" }}>
+    <Card className="w-100">
       <Card.Body>
-        <Card.Title>{`Room Number: ${booking.roomNumber}`}</Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">
-          {`User's Email: ${booking.userEmail}`}
-        </Card.Subtitle>
-        <Card.Text>
-          <strong>Price: </strong>
-          {`${newPrice}`}
-        </Card.Text>
-        <Card.Text>
-          <strong>Booking Start Date: </strong>
-          {`${getDate(booking.startTime)}`}
-        </Card.Text>
-        <Card.Text>
-          <strong>Booking End Date: </strong>
-          {`${getDate(booking.endTime)}`}
-        </Card.Text>
-        <Link to="/update" state={booking}>
-          <button className="btn btn-secondary btn1">Update</button>
-        </Link>
+        <div className="row">
+          <div className="col-md-6">
+            <Card.Title>{`Room Number: ${booking.roomNumber}`}</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">
+              {`User's Email: ${booking.userEmail}`}
+            </Card.Subtitle>
+            <Card.Text>
+              <strong>Price: </strong>
+              {`${newPrice}`}
+            </Card.Text>
+          </div>
+          <div className="col-md-6">
+            <Card.Text>
+              <strong>Booking Start Date: </strong>
+              {`${getDate(booking.startTime)}`}
+            </Card.Text>
+            <Card.Text>
+              <strong>Booking End Date: </strong>
+              {`${getDate(booking.endTime)}`}
+            </Card.Text>
+            <Link to="/update" state={booking}>
+              <button className="btn btn-secondary btn1 mr-auto">Update</button>
+            </Link>
+          </div>
+        </div>
       </Card.Body>
     </Card>
   );
