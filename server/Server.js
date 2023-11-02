@@ -8,6 +8,8 @@ const editRoute = require('./routes/edit');
 const deleteRoute = require("./routes/delete");
 const viewRoute = require("./routes/view");
 const viewRoomRoute = require("./routes/viewRoom");
+const filterRoute = require("./routes/filter");
+
 
 const app = express();
 app.use(cors());
@@ -21,6 +23,7 @@ app.use('/edit', editRoute);
 app.use('/delete', deleteRoute);
 app.use('/view', viewRoute);
 app.use('/viewRoom', viewRoomRoute);
+app.use('/filter', filterRoute);
 // setting up port
 const PORT = process.env.PORT || 5000;
 
