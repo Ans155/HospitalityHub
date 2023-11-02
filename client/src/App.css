@@ -1,4 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.css";
+body{
+  background-color: #6c757d7d;
+}
 .App {
   text-align: center;
 }
