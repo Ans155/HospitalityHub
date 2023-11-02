@@ -128,7 +128,7 @@ const BookingForm = () => {
       .then(function (response) {
         console.log(JSON.stringify(response.data));
         if (response.data._id !== undefined) {
-          toast.success("Booking Made");
+          toast.success("Booking Made and details sent on your email address!");
           setPostAdded(true);
         } else toast.error("Booking Failed");
       })
