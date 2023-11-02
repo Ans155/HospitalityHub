@@ -163,8 +163,7 @@ exports.bookRoom = async (req, res) => {
     await newBooking.save();
 
     // Send a confirmation email
-    a
-    wait sendConfirmationEmail(userEmail, roomNumber, price);
+    await sendConfirmationEmail(userEmail, roomNumber, price);
 
     res.status(201).json(newBooking);
   } catch (error) {
