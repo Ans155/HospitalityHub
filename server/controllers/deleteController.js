@@ -1,6 +1,6 @@
 const Booking = require('../model/Booking');
 
-// Calculate the time difference between two dates in hours
+//To Calculate the time difference between two dates in hours
 const calculateTimeDifferenceInHours = (date1, date2) => {
   const diffInMs = date1 - date2;
   return diffInMs / (1000 * 60 * 60);
@@ -34,7 +34,6 @@ exports.deleteBooking = async (req, res) => {
     // Perform the actual booking deletion from the database
     await Booking.deleteOne({ bookingId });
 
-    // Prepare the response
     const response = {
       message: 'Booking deleted successfully',
       refundPercentage,
