@@ -1,28 +1,24 @@
 // Login.js
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
- // const [confirmPassword, setConfirmPassword] = useState('');
   const [mode, setMode] = useState('login');
+
   const toggleMode = () => {
-    console.log(mode, "clicked");
-    // setMode((prevMode) => (prevMode === 'signup' ? 'login' : 'signup'));
-    
-    mode==='signup' ? (setMode('login')) : (setMode('signup'));
-    //mode==='signup' ? navigate('/login') : navigate('/signup');
-    console.log(mode);
+    setMode((prevMode) => (prevMode === 'signup' ? 'login' : 'signup'));
   };
 
   useEffect(() => {
-    mode==='signup' ? navigate('/signup') : navigate('/login');
+    navigate(mode === 'signup' ? '/signup' : '/login');
+  }, [mode, navigate]);
 
- },[mode]);
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:5000/auth/login', {
@@ -40,86 +36,66 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.heading}>Login</h2>
-      <form style={styles.form}>
-        <label style={styles.label}>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={styles.input}
-        />
-        <br />
-        <label style={styles.label}>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
-        />
-        <br />
-        <button type="button" onClick={handleLogin} style={styles.button}>
-          Login
-        </button>
-        <br />
-        <p style={styles.toggleText}>
-          {mode === 'signup' ? 'Already have an account?' : 'Don\'t have an account?'}
-          <span style={styles.toggleButton} onClick={toggleMode}>
-            {mode === 'signup' ? 'Login' : 'Signup'}
-          </span>
-        </p>
-      </form>
+    <div>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-3">
+      <h1 className="navbar-brand">Welcome To HospitalityHub!</h1>
+      </nav>
+    <br/>
+    <br/>
+      <div className="container">
+        <div className="card col-md-6 offset-md-3 shadow">
+          <div className="card-body">
+            <h2 className="card-title text-center mb-4">Login</h2>
+            <form>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email:
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-control"
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Password:
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-control"
+                  required
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleLogin}
+                className="btn btn-success btn-block"
+              >
+                Login
+              </button>
+              <p className="text-center mt-3">
+                {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}
+                <span
+                  className="text-primary ml-1"
+                  onClick={toggleMode}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {mode === 'signup' ? ' Login' : ' Signup'}
+                </span>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: '400px',
-    margin: 'auto',
-    padding: '20px',
-    border: '3px solid blue',
-    borderRadius: '8px',
-    marginTop: '50px',
-  },
-  heading: {
-    textAlign: 'center',
-    color: '#333',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  label: {
-    margin: '10px 0',
-    color: '#555',
-  },
-  input: {
-    padding: '8px',
-    marginBottom: '15px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-  },
-  button: {
-    backgroundColor: '#4caf50',
-    color: 'white',
-    padding: '10px',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  toggleText: {
-    marginTop: '10px',
-    textAlign: 'center',
-    color: '#333',
-  },
-
-  toggleButton: {
-    textDecoration: 'underline',
-    cursor: 'pointer',
-    marginLeft: '5px', // Add some spacing between Login and Signup
-  },
 };
 
 export default Login;

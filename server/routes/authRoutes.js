@@ -11,6 +11,11 @@ router.post('/signup', async (req, res) => {
   try {
     const { userEmail, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
+    const dummy = await User.findOne({userEmail});
+    if(dummy)
+    {
+      return res.status(500).json({message: 'Email already exists'});
+    }
     const user = new User({ userEmail, password: hashedPassword });
     await user.save();
     res.status(201).json({ message: 'User created successfully' });
@@ -23,7 +28,7 @@ router.post('/signup', async (req, res) => {
 // Login
 router.post('/login', (req, res, next) => {
     const { userEmail, password } = req.body;
-    console.log(password);
+    //console.log(password);
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
       return next(err);
