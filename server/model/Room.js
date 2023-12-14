@@ -16,6 +16,12 @@ const roomSchema = new mongoose.Schema({
   },
 });
 
+//user_id
+// Users = {id, }
+//Location ={id, location};
+
+
+// Select UserActivation.name , location
 const Room = mongoose.model('Room', roomSchema);
 
 module.exports = Room;

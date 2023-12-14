@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 
+
 const Bookings = () => {
   function formatDate(date) {
     const newDate = new Date(date);
@@ -19,12 +20,17 @@ const Bookings = () => {
   const [filterData, setFilterData] = useState({
     roomNumber: "",
     roomType: "",
-    startDate: "", // Change input type to "datetime-local"
-    endDate: "", // Change input type to "datetime-local"
+    startDate: "",
+    endDate: "", 
   });
-
+  const formatRefundMessage = (hours) => {
+    if (hours >= 48) return "100% REFUND";
+    else if (hours >= 24) return "50% REFUND";
+    else return "NO REFUND";
+  };
   useEffect(() => {
-    axios.get("http://localhost:5000/view/bookings").then((response) => {
+    axios.get("https://hotelbackend-4phi.onrender.com/view/bookings").then((response) => {
+      
       setBookings(response.data);
     });
   }, []);
@@ -37,8 +43,12 @@ const Bookings = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Do you want to continue delete the booking")) {
-      axios.delete(`http://localhost:5000/delete/${id}`).then(() => {
+      axios.delete(`https://hotelbackend-4phi.onrender.com/delete/${id}`).then((response) => {
         setBookings(bookings.filter((booking) => booking.bookingId !== id));
+
+        const refundPercentage = response.data.refundPercentage;
+        const refundMessage = formatRefundMessage(refundPercentage);
+        toast.info(`Booking Deleted - ${refundMessage}`);
       });
     }
   };
@@ -55,10 +65,10 @@ const Bookings = () => {
     console.log(formattedFilterData.startDate);
     // Send a request to the server with the formatted filter criteria
     axios
-      .post("http://localhost:5000/filter/bookings", formattedFilterData)
+      .post("https://hotelbackend-4phi.onrender.com/filter/bookings", formattedFilterData)
       .then((response) => {
-        setBookings(response.data); // Update the bookings state with filtered data
-        setShowFilterModal(false); // Close the modal
+        setBookings(response.data); 
+        setShowFilterModal(false); 
       })
       .catch((error) => {
         // Handle error, e.g., display an error message or toast
@@ -67,7 +77,7 @@ const Bookings = () => {
       });
   };
   
-  // Function to format date for the backend
+
 // Function to format date for the backend
 const formatDateForBackend = (dateString) => {
   if (dateString) {
@@ -95,7 +105,7 @@ const formatDateForBackend = (dateString) => {
 
 
   return (
-    <div>
+    <div >
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-3">
         <h1 className="text-white mx-2">View Bookings</h1>
         <div className="d-flex justify-content-end">
@@ -207,6 +217,7 @@ const formatDateForBackend = (dateString) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      
     </div>
   );
 };
