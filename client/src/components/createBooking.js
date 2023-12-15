@@ -9,6 +9,7 @@ import image1 from "../images/image3.jfif";
 import HospitalityHub from "../images/image4.jfif";
 
 const BookingForm = () => {
+  const token = localStorage.getItem('token');
   const [pricePerHour, setPricePerHour] = useState(0);
   const navigate = useNavigate();
   const [postAdded, setPostAdded] = useState(false);
@@ -27,7 +28,9 @@ const BookingForm = () => {
   
   useEffect(() => {
     axios
-      .get("https://hotelbackend-4phi.onrender.com/viewRoom/Rooms")
+      .get("https://hotelbackend-4phi.onrender.com/viewRoom/Rooms",{headers: {
+        Authorization: `Bearer ${token}`,
+      },})
       .then((response) => {
         setRooms(response.data);
       });
@@ -87,6 +90,7 @@ const BookingForm = () => {
       url: "https://hotelbackend-4phi.onrender.com/create",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       data: updatedBooking,
     };

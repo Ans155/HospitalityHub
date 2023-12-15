@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import image1 from "../images/image3.jfif";
 
 const UpdatingForm = () => {
+  const token = localStorage.getItem('token');
   const [pricePerHour, setPricePerHour] = useState(0);
   const id = useLocation().state.bookingId;
   const navigate = useNavigate();
@@ -53,7 +54,9 @@ const UpdatingForm = () => {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:5000/viewRoom/Rooms").then((response) => {
+    axios.get("http://localhost:5000/viewRoom/Rooms", {headers: {
+      Authorization: `Bearer ${token}`,
+    },}).then((response) => {
       setRooms(response.data);
     });
   }, []);
@@ -83,6 +86,7 @@ const UpdatingForm = () => {
       url: `http://localhost:5000/edit/${id}`,
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       data: updatedBooking,
     };

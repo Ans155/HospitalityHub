@@ -19,6 +19,7 @@ function App() {
           <Route path="/update" element={< UpdatingForm />} />
           <Route path="/signup" element={< Signup />} />
           <Route path="/login" element={< Login/>} />
+          <Route index element={<Login />} />
         </Routes>
       </Router>
     </>

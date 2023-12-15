@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import BookingCard from "../components/BookingCard";
 import { toast } from "react-toastify";
@@ -14,9 +15,11 @@ const Bookings = () => {
     const newDate = new Date(date);
     return newDate.toISOString().slice(0, 16);
   }
-
+  const token = localStorage.getItem('token');
+  //console.log(token);
   const [bookings, setBookings] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
+  const navigate = useNavigate();
   const [filterData, setFilterData] = useState({
     roomNumber: "",
     roomType: "",
@@ -29,7 +32,9 @@ const Bookings = () => {
     else return "NO REFUND";
   };
   useEffect(() => {
-    axios.get("https://hotelbackend-4phi.onrender.com/view/bookings").then((response) => {
+    axios.get("https://hotelbackend-4phi.onrender.com/view/bookings", {headers: {
+      Authorization: `Bearer ${token}`,
+    },}).then((response) => {
       
       setBookings(response.data);
     });
@@ -43,7 +48,9 @@ const Bookings = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Do you want to continue delete the booking")) {
-      axios.delete(`https://hotelbackend-4phi.onrender.com/delete/${id}`).then((response) => {
+      axios.delete(`https://hotelbackend-4phi.onrender.com/delete/${id}`, {headers: {
+        Authorization: `Bearer ${token}`,
+      },}).then((response) => {
         setBookings(bookings.filter((booking) => booking.bookingId !== id));
 
         const refundPercentage = response.data.refundPercentage;
@@ -52,7 +59,10 @@ const Bookings = () => {
       });
     }
   };
-
+  const handleLogout =() => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
   const handleFilterSubmit = () => {
     // Convert date inputs to the format used in your database
     console.log(filterData.startDate);
@@ -62,7 +72,7 @@ const Bookings = () => {
       endDate: filterData.endDate,
         
     };
-    console.log(formattedFilterData.startDate);
+    //console.log(formattedFilterData.startDate);
     // Send a request to the server with the formatted filter criteria
     axios
       .post("https://hotelbackend-4phi.onrender.com/filter/bookings", formattedFilterData)
@@ -106,10 +116,11 @@ const formatDateForBackend = (dateString) => {
 
   return (
     <div >
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-3">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-between mb-3">
         <h1 className="text-white mx-2">View Bookings</h1>
-        <div className="d-flex justify-content-end">
-          <button
+        
+         <div>
+         <button
             className="btn btn-primary mx-2"
             onClick={() => setShowFilterModal(true)}
           >
@@ -118,7 +129,12 @@ const formatDateForBackend = (dateString) => {
           <Link to="/">
             <button className="btn btn-success mx-2">Add Booking</button>
           </Link>
-        </div>
+        
+        <button className="btn btn-primary mx-3" onClick={handleLogout}>
+          LOGOUT
+        </button>
+         </div>
+          
       </nav>
 
       <Container className="container">

@@ -85,6 +85,7 @@ const Signup = () => {
                       required
                     />
                   </div>
+                  <br/>
                   <button
                     type="button"
                     onClick={handleSignup}

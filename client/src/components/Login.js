@@ -27,7 +27,9 @@ const Login = () => {
       });
 
       toast.success('Login successful');
-      console.log(response.data);
+      //console.log(response.data);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
       navigate('/view');
     } catch (error) {
       toast.error('Login failed');
@@ -73,6 +75,7 @@ const Login = () => {
                   required
                 />
               </div>
+              
               <button
                 type="button"
                 onClick={handleLogin}
