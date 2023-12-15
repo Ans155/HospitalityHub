@@ -26,7 +26,7 @@ app.use('/auth', authRoutes);
 app.use('/create',passport.authenticate('jwt', { session: false }), routes);
 app.use('/edit',passport.authenticate('jwt', { session: false }), editRoute);
 app.use('/delete',passport.authenticate('jwt', { session: false }), deleteRoute);
-app.use('/view',passport.authenticate('jwt', { session: false }), viewRoute);
+app.use('/view',passport.authenticate('jwt', { session: false }),viewRoute);
 app.use('/viewRoom',passport.authenticate('jwt', { session: false }), viewRoomRoute);
 app.use('/filter',passport.authenticate('jwt', { session: false }), filterRoute);
 // setting up port

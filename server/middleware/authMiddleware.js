@@ -31,12 +31,14 @@ passport.use(new LocalStrategy({
 
 // JWT Strategy (for protecting routes)
 passport.use(new JwtStrategy({
+  //console.log(req)
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  
   secretOrKey: 'secret123', // Replace with your secret key
 }, async (jwt_payload, done) => {
   try {
     const user = await User.findById(jwt_payload.id);
-
+    //console.log(user);
     if (!user) {
       return done(null, false);
     }
