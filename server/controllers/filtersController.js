@@ -25,7 +25,7 @@ exports.filterBookings = async (req, res) => {
       // Set the filter criteria for startDate
       filterCriteria.startTime = {
         $gte: startDateTimestamp,
-        $lt: startDateTimestamp + 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+        //$lt: startDateTimestamp + 24 * 60 * 60 * 1000, // 24 hours in milliseconds
       };
     }
 
@@ -38,8 +38,8 @@ exports.filterBookings = async (req, res) => {
 
       // Set the filter criteria for endDate
       filterCriteria.endTime = {
-        $gte: endDateTimestamp,
-        $lt: endDateTimestamp + 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+        //$gte: endDateTimestamp,
+        $lt: endDateTimestamp, // 24 hours in milliseconds
       };
     }
 

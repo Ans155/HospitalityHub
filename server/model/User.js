@@ -5,10 +5,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password :{
+  password: {
     type: String,
-    required: false,
-  }
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
+  },
 });
 
 const User = mongoose.model('User', userSchema);
