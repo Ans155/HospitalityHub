@@ -1,41 +1,56 @@
-# Hotel Room Management Admin App
-This project is a complete admin-facing solution for managing rooms in a hotel. It allows admins to create, edit, delete, and view room bookings. The project is built using the following technologies:
 
-# Front-end:
-HTML, CSS
-JavaScript
-React
+# Hotel Room Booking System
 
-# Back-end:
-Node.js
-Express.js
-Database:
+This project is a comprehensive solution for managing rooms in a hotel, offering a user-friendly interface for both administrators and customers. It empowers users to create, edit, delete, and view room bookings, transforming it into a robust hotel booking system. The project is built using the following technologies:
 
-# MongoDB
-The app provides the following features:
+## Front-end
+- HTML, CSS
+- JavaScript
+- React
 
-**Key Functionalities**
------------------------
-- Admins can book rooms by providing the user's email, room number, start time, and end time.
-The price of the booking updates dynamically as admins modify any of the booking details.
-Overlapping bookings for the same room are not allowed.
-## Editing Bookings:
+## Back-end
+- Node.js
+- Express.js
 
-Admins can edit booking details, including user email, room number, start time, and end time.
-The updated price is recalculated upon confirmation.
-## Canceling Bookings:
+## Database
+- MongoDB
 
--Admins can cancel future bookings with refund conditions:
-If the booking start time is more than 48 hours, a complete refund is issued.
-If the booking start time is within 24 to 48 hours, a 50% refund is issued.
-Otherwise, no refund is provided, but admins can still cancel the booking.
-## Viewing Bookings:
--Admins can view all bookings, both upcoming and passed, with various filters:
-Filter by room number and room type.
-Filter by start time and end time.
-## Creating Bookings:
-Admins can book rooms by providing the user's email, room number, start time, and end time.
-The price of the booking updates dynamically as admins modify any of the booking details.
+### Key Functionalities
+
+#### User Features:
+
+1. **User Authentication:**
+   - Users can securely log in or sign up using JSON Web Token (JWT) authentication.
+   - Two roles are supported: CUSTOMER and ADMIN.
+
+2. **Role-Based Access:**
+   - Different roles have different access levels.
+   - **CUSTOMER:**
+     - Can request room bookings.
+     - Can view all available rooms.
+   - **ADMIN:**
+     - Can manage rooms, bookings, and users.
+
+3. **Booking Rooms:**
+   - Customers can book rooms by providing necessary details such as name, email, room preferences, start time, and end time.
+   - The price of the booking updates dynamically as customers modify any booking details.
+   - Overlapping bookings for the same room are not allowed.
+
+4. **Editing Bookings:**
+   - Customers can edit their booking details, including personal information and reservation details.
+   - The updated price is recalculated upon confirmation.
+
+5. **Canceling Bookings:**
+   - Customers can cancel future bookings with refund conditions:
+     - If the booking start time is more than 48 hours, a complete refund is issued.
+     - If the booking start time is within 24 to 48 hours, a 50% refund is issued.
+     - Otherwise, no refund is provided, but customers can still cancel the booking.
+
+6. **Viewing Bookings:**
+   - Customers can view their own bookings, both upcoming and past reservations.
+   - Admins can view all bookings, both upcoming and passed, with various filters:
+     - Filter by room number and room type.
+     - Filter by start time and end time.
 
 
 
