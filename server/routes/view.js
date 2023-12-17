@@ -9,5 +9,5 @@ const passport = require('../middleware/authMiddleware');
  * @access public
  */
 router.get('/bookings',viewController.viewBookings);
-
+//router.get('/request',viewRController.viewRBookings);
 module.exports = router;
