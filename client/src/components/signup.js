@@ -23,21 +23,21 @@ const Signup = () => {
   const handleSignup = async () => {
     try {
       // Check if passwords match
-      if (password !== confirmPassword) {
-        toast.error('Passwords do not match');
-        return;
-      }
-
-      const response = await axios.post('http://localhost:5000/auth/signup', {
+      // if (password !== confirmPassword) {
+      //   toast.error('Passwords do not match');
+      //   return;
+      // }
+      console.log(email,password)
+      const response = await axios.post('https://hotelbackend-4phi.onrender.com/auth/signup', {
         userEmail: email,
         password: password,
       });
 
-      toast.success(response.data.message);
+      //toast.success(response.data.message);
       //console.log(response.data);
       navigate('/login');
     } catch (error) {
-      toast.error(error.response.data.message);
+      //toast.error(error.response.data.message);
       //console.error('Signup error:', error.response.data);
     }
   };
