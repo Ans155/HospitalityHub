@@ -4,13 +4,18 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { jwtDecode } from 'jwt-decode';
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mode, setMode] = useState('login');
-
+  const handleDefaultAdminAccess = () => {
+    // Set default admin email and password
+    setEmail('admin@example.com');
+    setPassword('adminpassword');
+  };
+  
   const toggleMode = () => {
     setMode((prevMode) => (prevMode === 'signup' ? 'login' : 'signup'));
   };
@@ -21,7 +26,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/auth/login', {
+      const response = await axios.post('https://hotelbackend-4phi.onrender.com/auth/login', {
         userEmail: email,
         password: password,
       });
@@ -30,7 +35,15 @@ const Login = () => {
       //console.log(response.data);
       const token = response.data.token;
       localStorage.setItem('token', token);
-      navigate('/view');
+      const decodedToken = jwtDecode(token);
+      const userRole = decodedToken.role;
+      console.log(userRole);
+      if(userRole==='admin')
+      {
+        navigate('/view')
+      }
+      else
+      navigate('/create');
     } catch (error) {
       toast.error('Login failed');
       console.error('Login error:', error.response.data);
@@ -39,7 +52,7 @@ const Login = () => {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-3">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-4">
       <h1 className="navbar-brand">Welcome To HospitalityHub!</h1>
       </nav>
     <br/>
@@ -82,6 +95,14 @@ const Login = () => {
                 className="btn btn-success btn-block"
               >
                 Login
+              </button>
+              <button
+                type="button"
+                onClick={handleDefaultAdminAccess}
+                className="btn btn-primary btn-block mt-6"
+                style={{marginLeft:'50px'}}
+              >
+                Default Admin Access
               </button>
               <p className="text-center mt-3">
                 {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}
