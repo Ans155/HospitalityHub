@@ -27,7 +27,7 @@ router.post('/signup', async (req, res) => {
 
 // Login
 router.post('/login', (req, res, next) => {
-    const { userEmail, password } = req.body;
+    const { userEmail, password, role } = req.body;
     //console.log(password);
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
@@ -39,7 +39,7 @@ router.post('/login', (req, res, next) => {
       return res.status(401).json({ message: info.message });
     }
 
-    const token = jwt.sign({ id: user._id, email: user.userEmail }, 'secret123', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, email: user.userEmail, role: user.role}, 'secret123', { expiresIn: '1h' });
     return res.json({ token });
   })(req, res, next);
 });
