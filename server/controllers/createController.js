@@ -15,12 +15,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function sendConfirmationEmail(userEmail, roomNumber, price) {
+async function sendConfirmationEmail(userEmail, roomNumber, price,role) {
   try {
     const info = await transporter.sendMail({
       from: 'anshch12334@gmail.com',
       to: userEmail,              
-      subject: "Your Booking is confirmed",
+      subject: role==='admin'? "Your Booking is confirmed" : "Your Booking is requested",
       html: `
         <h1>Hello there,</h1>
         <p>Your room number is ${roomNumber} and total cost is ${price}</p>
@@ -33,9 +33,10 @@ async function sendConfirmationEmail(userEmail, roomNumber, price) {
   }
 }
 
-exports.bookRoom = async (req, res) => {
+ const bookRoom = async (req, res) => {
   try {
-    const { userEmail, roomType, roomNumber, startTime, endTime, price } = req.body;
+    const { userEmail, roomType, roomNumber, startTime, endTime, price } = req.body.updatedBooking;
+    const role= req.body.userRole;
 
     // Checking if the room exists
     const room = await Room.findOne({ roomNumber });
@@ -71,15 +72,45 @@ exports.bookRoom = async (req, res) => {
       endTime,
       price,
       roomType,
+      status : role==='user' ? 'requested' : 'confirmed',
     });
     await newBooking.save();
 
     // Send a confirmation email
-    await sendConfirmationEmail(userEmail, roomNumber, price);
+    await sendConfirmationEmail(userEmail, roomNumber, price,role);
 
     res.status(201).json(newBooking);
   } catch (error) {
     console.error("Error booking room:", error);
     res.status(500).json({ error: "Failed to book a room" });
   }
+};
+
+const validateBooking = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+
+    // Find the booking by ID
+    const booking = await Booking.findOne({ bookingId });
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Update the booking status to 'validated'
+    booking.status = 'validated';
+    
+    // Save the updated booking to the database
+    const updatedBooking = await booking.save();
+    await sendConfirmationEmail(userEmail, roomNumber, price,role);
+    res.json(updatedBooking);
+  } catch (error) {
+    console.error('Error validating booking:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+module.exports = {
+  bookRoom,
+  validateBooking,
 };
