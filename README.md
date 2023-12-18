@@ -52,7 +52,13 @@ This project is a comprehensive solution for managing rooms in a hotel, offering
      - Filter by room number and room type.
      - Filter by start time and end time.
 
+## Email Confirmation Feature
 
+We've added an exciting new feature to enhance user experience—the Email Confirmation feature. Now, users will receive email confirmations for successful room bookings, providing them with a detailed record of their reservation.
+
+### How It Works
+
+When a user successfully books a room, a confirmation email is automatically sent to the provided email address. The email contains important details such as the reservation dates, room preferences, and any other relevant information.
 
 # Installation
 Clone the repository:
