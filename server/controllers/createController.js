@@ -89,7 +89,7 @@ async function sendConfirmationEmail(userEmail, roomNumber, price,role) {
 const validateBooking = async (req, res) => {
   try {
     const { bookingId } = req.params;
-
+    const role= req.body.userRole;
     // Find the booking by ID
     const booking = await Booking.findOne({ bookingId });
 
@@ -98,11 +98,11 @@ const validateBooking = async (req, res) => {
     }
 
     // Update the booking status to 'validated'
-    booking.status = 'validated';
+    booking.status = 'confirmed';
     
     // Save the updated booking to the database
     const updatedBooking = await booking.save();
-    await sendConfirmationEmail(userEmail, roomNumber, price,role);
+    await sendConfirmationEmail(booking.userEmail, booking.roomNumber, booking.price,role);
     res.json(updatedBooking);
   } catch (error) {
     console.error('Error validating booking:', error);
