@@ -13,7 +13,7 @@ const viewRoute = require("./routes/view");
 const viewRoomRoute = require("./routes/viewRoom");
 const filterRoute = require("./routes/filter");
 const userRoute = require("./routes/user");
-
+const statRoute = require("./routes/stats");
 
 const app = express();
 app.use(cors());
@@ -31,6 +31,7 @@ app.use('/view',viewRoute);
 app.use('/viewRoom',viewRoomRoute);
 app.use('/user',userRoute);
 app.use('/filter',filterRoute);
+app.use('/stats',statRoute);
 // setting up port
 const BASE_URL = process.env.BASE_URL;
 const PORT =process.env.PORT || 5000

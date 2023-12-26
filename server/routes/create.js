@@ -8,6 +8,6 @@ const createController = require('../controllers/createController');
  * @access public
  */
 router.post('/', createController.bookRoom);
-router.put('/:bookingId/validate', createController.validateBooking);
+router.post('/:bookingId/validate', createController.validateBooking);
 
 module.exports = router;
