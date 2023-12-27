@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const User = require('../model/User');
 const router = express.Router();
 
-User.collection.createIndex({ userEmail: 1 });
+
 router.post('/signup', async (req, res) => {
   try {
     const { userEmail, password } = req.body;
@@ -25,28 +25,29 @@ router.post('/signup', async (req, res) => {
 });
 
 // Login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
   try {
-    const { userEmail, password, role } = req.body;
-    const user = await User.findOne({ userEmail });
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+    
+      if (!user) {
+        return res.status(401).json({ message: info.message });
+      }
 
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    const isPasswordValid = await user.isValidPassword(password);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    const token = jwt.sign({ id: user._id, email: user.userEmail, role: user.role }, 'secret123', { expiresIn: '1h' });
-    return res.json({ token });
+      const token = generateToken(user);
+      return res.json({ token });
+    })(req, res, next);
   } catch (err) {
-    //console.error(err);
-    res.status(500).json({ message: "Internal Server Error" });
+    next(err);
   }
 });
 
+function generateToken(user) {
+  const { _id, userEmail, role } = user;
+  const token = jwt.sign({ id: _id, email: userEmail, role }, 'secret123', { expiresIn: '1h' });
+  return token;
+}
 
 module.exports = router;
