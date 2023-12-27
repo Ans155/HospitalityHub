@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const User = require('../model/User');
 const router = express.Router();
 
-
+User.collection.createIndex({ userEmail: 1 });
 router.post('/signup', async (req, res) => {
   try {
     const { userEmail, password } = req.body;
@@ -25,7 +25,7 @@ router.post('/signup', async (req, res) => {
 });
 
 // Login
-router.post('/login', async (req, res, next) => {
+router.post('/login', async (req, res) => {
   try {
     const { userEmail, password, role } = req.body;
     const user = await User.findOne({ userEmail });
