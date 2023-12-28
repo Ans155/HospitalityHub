@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -20,6 +18,8 @@ import p7 from "../images/image11.jfif";
 import p8 from "../images/image12.jfif";
 import p9 from "../images/image13.jfif";
 import { jwtDecode } from "jwt-decode";
+import styled from "styled-components";
+import { useNavigate, Link } from "react-router-dom";
 
 const BookingForm = () => {
   const token = localStorage.getItem('token');
@@ -37,15 +37,14 @@ const BookingForm = () => {
   });
   const tokenDecoded = jwtDecode(token);
   const userRole= tokenDecoded.role;
-  console.log(tokenDecoded);
   const [Rooms, setRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState([]);
-  const carouselImages = useMemo(() => [p1, p2, p3, p4, p5,p6,p7,p8,p9], []);
+  const carouselImages = useMemo(() => [p1, p2, p3, p4, p5, p6, p7, p8, p9], []);
 
   const carouselSettings = {
     dots: true,
     infinite: true,
-    speed: 10000,
+    speed: 5000,
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
@@ -58,16 +57,14 @@ const BookingForm = () => {
       },
     ],
   };
-  const carouselContainerStyle = {
-    maxWidth: '1000px',
-    margin: 'auto',
-    marginTop: '20px',
-  };
+
   useEffect(() => {
     axios
-      .get("https://hotelbackend-4phi.onrender.com/viewRoom/Rooms",{headers: {
-        Authorization: `Bearer ${token}`,
-      },})
+      .get("https://hotelbackend-4phi.onrender.com/viewRoom/Rooms", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         setRooms(response.data);
       });
@@ -84,9 +81,10 @@ const BookingForm = () => {
   }, [booking, pricePerHour]);
 
   useEffect(() => {
-    // Filter rooms based on the selected room type
     const selectedRoomType = booking.roomType.split("(")[0] + "";
-    setPricePerHour(selectedRoomType === "A" ? 100 : selectedRoomType === "B" ? 80 : 50);
+    setPricePerHour(
+      selectedRoomType === "A" ? 100 : selectedRoomType === "B" ? 80 : 50
+    );
 
     const filteredRoomNumbers = Rooms.filter(
       (room) => room.roomType === selectedRoomType
@@ -97,11 +95,22 @@ const BookingForm = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-
+    if (name === "startTime" && booking.endTime!=="") {
+      if(Date.parse(value) >= Date.parse(booking.endTime))
+      alert("End time must be greater than the start time");
+      
+      return;
+    }
+    if (name === "endTime" && booking.startTime==="") {
+      alert("First enter start time");
+      
+      return;
+    }
     if (name === "endTime" && Date.parse(value) <= Date.parse(booking.startTime)) {
       alert("End time must be greater than the start time");
-      return; // Prevent updating endTime
+      return;
     }
+    
 
     setBooking({
       ...booking,
@@ -129,7 +138,7 @@ const BookingForm = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      data: {updatedBooking,userRole}
+      data: { updatedBooking, userRole },
     };
 
     axios(config)
@@ -148,180 +157,286 @@ const BookingForm = () => {
         toast.error(error.response.data.message);
       });
   };
-  function getCurrentDateTime() {
+
+  const getCurrentDateTime = () => {
     const now = new Date();
     const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
     const day = now.getDate().toString().padStart(2, '0');
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
-  
+
     return `${year}-${month}-${day}T${hours}:${minutes}`;
-  }
-  const imageContainerStyle = {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "20px",
   };
 
-  const imageStyle = {
-    width: "500px",
-    height: "300px",
-  };
-  const handleLogout =() => {
-    console.log('loggin out')
+  const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
-  return (
-    <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-3">
-        <h1 className="text-white mx-2">Welcome To HospitalityHub!</h1>
-        
-        <div>
-        {userRole==='user'? 
-        (
-        <>
-        <Link to='/user/bookedRooms'>
-          <button
-            className="btn btn-primary mx-2"
-          >
-            My Bookings
-          </button>
-          </Link>
-        
-          <Link to="/rooms">
-            <button className="btn btn-success mx-2">All Rooms</button>
-          </Link>
-          </>
-  )
-          : 
-          <>
-          <Link to='/view'>
-          <button
-            className="btn btn-primary mx-2"
-          >
-            All Bookings
-          </button>
-          </Link>
-        
-          <Link to="/requested">
-            <button className="btn btn-success mx-2">Pending Bookings</button>
-          </Link>
-          
-          </>
-      }
-          
-        
-        <button className="btn btn-primary mx-2" onClick={handleLogout}>
-          LOGOUT
-        </button>
-         </div>
-      </nav>
-      
-      <Form className="row w-sm-100 m-3" onSubmit={handleSubmit}>
-        <Form.Group className="col-12 col-md-6 mb-3" controlId="formBasicEmail">
-          <Form.Label>User Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={booking.userEmail}
-            name="userEmail"
-            onChange={handleInputChange}
-            required
-            
-          />
-        </Form.Group>
 
-        <Form.Group className="col-12 col-md-6 mb-3" controlId="formBasicPassword">
-          <Form.Label>Select Room Type</Form.Label>
-          <select
-            name="roomType"
-            className="form-control"
-            id="exampleFormControlSelect1"
-            value={booking.roomType}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="">Select a Room Type</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </select>
-        </Form.Group>
-        <Form.Group className="col-12 col-md-6 mb-3" controlId="formBasicPassword">
-          <Form.Label>Select Room Number</Form.Label>
-          <select
-            name="roomNumber"
-            className="form-control"
-            id="exampleFormControlSelect1"
-            onChange={handleInputChange}
-            value={booking.roomNumber}
-            required
-          >
-            <option value="">Select a Room Number</option>
-            {filteredRooms.map((room) => (
-              <option key={room.roomNumber} value={room.roomNumber}>
-                {room.roomNumber}
-              </option>
-            ))}
-          </select>
-        </Form.Group>
-        <Form.Group className="col-12 col-md-6 mb-3" controlId="formBasicPassword">
-          <Form.Label>Start Time:</Form.Label>
-          <Form.Control
-            type="datetime-local"
-            name="startTime"
-            value={booking.startTime}
-            onChange={handleInputChange}
-            required
-            min={getCurrentDateTime()}
-          />
-        </Form.Group>
-        <Form.Group className="col-12 col-md-6 mb-3" controlId="formBasicPassword">
-          <Form.Label>End Time:</Form.Label>
-          <Form.Control
-            type="datetime-local"
-            name="endTime"
-            value={booking.endTime}
-            onChange={handleInputChange}
-            min={getCurrentDateTime()}
-            required
-          />
-        </Form.Group>
-        <Form.Group className="col-12 col-md-6 mb-3" controlId="formBasicPassword">
-          <Form.Label>Price:</Form.Label>
-          <Form.Control
-            type="number"
-            name="price"
-            value={priceDisplay}
-            required
-            disabled
-          />
-        </Form.Group>
-        <Button className="col-md-3 mx-auto" variant="primary" type="submit">
-          {userRole==='admin' ? "Add Booking" : "Request Booking"}
-        </Button>
-      </Form>
-      <div style={carouselContainerStyle}>
-        <Slider {...carouselSettings}>
-          {carouselImages.map((image, index) => (
-            <div key={index} style={{margin: '0 10px'}}>
-              <img src={image} alt={`Image ${index + 1}`} style={{ width: '98%', height: '250px' }} />
-            </div>
-          ))}
-        </Slider>
+  return (
+    <StyledContainer>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container-fluid">
+        <h1 className="navbar-brand text-white">Welcome To HospitalityHub!</h1>
+
+        
+
+        <div className="navbar-collapse">
+          <div className="navbar-nav ms-auto">
+            {userRole === 'user' ? (
+              <>
+                <Link to="/user/bookedRooms" className="nav-link">
+                  <button className="btn btn-primary mx-2">My Bookings</button>
+                </Link>
+                <Link to="/rooms" className="nav-link">
+                  <button className="btn btn-success mx-2">All Rooms</button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/dashboard" className="nav-link">
+                  <button className="btn btn-success mx-2">Admin Dashboard</button>
+                </Link>
+                <Link to="/view" className="nav-link">
+                  <button className="btn btn-primary mx-2">All Bookings</button>
+                </Link>
+                <Link to="/requested" className="nav-link">
+                  <button className="btn btn-success mx-2">Pending Bookings</button>
+                </Link>
+              </>
+            )}
+
+            <button className="btn btn-primary mx-2" onClick={handleLogout}>
+              LOGOUT
+            </button>
+          </div>
+        </div>
+
+        {/* <label htmlFor="nav-toggle" className="nav-toggle-label">
+          <span></span>
+        </label> */}
       </div>
-      {/* <div style={imageContainerStyle}>
-        <img
-          src={image1}
-          alt="Image 1"
-          style={{ ...imageStyle, maxWidth: "100%" }}
-          className="img-fluid"
-        />
-      </div> */}
-    </>
+    </nav>
+
+      <StyledContent>
+      <StyledCarouselContainer>
+          <Slider {...carouselSettings}>
+            {carouselImages.map((image, index) => (
+              <StyledCarouselItem key={index}>
+                <img src={image} alt={`Image ${index + 1}`} />
+              </StyledCarouselItem>
+            ))}
+          </Slider>
+        </StyledCarouselContainer>
+        <br/>
+        <br/>
+        <StyledFormContainer>
+          <StyledForm onSubmit={handleSubmit}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>User Email address</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                value={booking.userEmail}
+                name="userEmail"
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Select Room Type</Form.Label>
+              <StyledSelect
+                name="roomType"
+                className="form-control"
+                value={booking.roomType}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">Select a Room Type</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+              </StyledSelect>
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Select Room Number</Form.Label>
+              <StyledSelect
+                name="roomNumber"
+                className="form-control"
+                onChange={handleInputChange}
+                value={booking.roomNumber}
+                required
+              >
+                <option value="">Select a Room Number</option>
+                {filteredRooms.map((room) => (
+                  <option key={room.roomNumber} value={room.roomNumber}>
+                    {room.roomNumber}
+                  </option>
+                ))}
+              </StyledSelect>
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Start Time:</Form.Label>
+              <Form.Control
+                type="datetime-local"
+                name="startTime"
+                value={booking.startTime}
+                onChange={handleInputChange}
+                required
+                min={getCurrentDateTime()}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>End Time:</Form.Label>
+              <Form.Control
+                type="datetime-local"
+                name="endTime"
+                value={booking.endTime}
+                onChange={handleInputChange}
+                min={getCurrentDateTime()}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Price:</Form.Label>
+              <Form.Control
+                type="number"
+                name="price"
+                value={priceDisplay}
+                required
+                disabled
+              />
+            </Form.Group>
+            <br/>
+            <Button style={{width:'20%',borderRadius:'3px',margin: 'auto', display: 'block' }}variant="primary" type="submit">
+              {userRole === 'admin' ? "Add Booking" : "Request Booking"}
+            </Button>
+          </StyledForm>
+        </StyledFormContainer>
+      </StyledContent>
+        
+        
+      
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled.div`
+background: linear-gradient(to right, #0052D4, #65C7F7, #9CECFB);
+  min-height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledNavbar = styled.nav`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #343a40;
+  padding: 0.5rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+
+    h1 {
+      margin-right: auto;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    button {
+      margin-left: 0.3rem;
+      margin-right: 0.3rem
+    }
+
+    button:first-child {
+      margin-left: 0;
+    }
+  }
+`;
+
+
+const StyledContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: 20px;
+`;
+
+const StyledFormContainer = styled.div`
+  width: 100%;
+  max-width: 1000px; 
+`;
+
+const StyledButton = styled.button`
+  margin-left: 0.5rem;
+`;
+
+const StyledForm = styled(Form)`
+  row-gap: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+  .form-label {
+    color: #495057;
+    font-size: 1.2rem; 
+  }
+
+  .form-control {
+    border: 2px solid #ced4da;
+    border-radius: 8px; 
+    font-size: 1rem;
+  }
+
+  ${StyledButton} {
+    width: 100%;
+    background-color: #007bff; 
+    border-color: #007bff;
+    transition: background-color 0.3s ease; 
+
+    &:hover,
+    &:focus {
+      background-color: #0056b3;
+    }
+  }
+`;
+
+const StyledSelect = styled.select`
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  width: 100%;
+`;
+
+const StyledCarouselContainer = styled.div`
+  max-width: 100%;
+  margin: auto;
+  margin-top: 5px;
+`;
+
+const StyledCarouselItem = styled.div`
+  margin: 0 10px;
+
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+`;
 
 export default BookingForm;
