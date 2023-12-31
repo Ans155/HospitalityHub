@@ -1,9 +1,10 @@
-// MyBookings.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
 const MyBookings = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ const MyBookings = () => {
   }
 
   useEffect(() => {
-    // Fetch user's bookings from the server
     axios
       .get(`https://hotelbackend-4phi.onrender.com/user/${userEmail}/bookedRooms`)
       .then((response) => {
@@ -33,57 +33,126 @@ const MyBookings = () => {
         console.error('Error fetching bookings:', error);
       });
   }, []);
-  const handleLogout =() => {
-    console.log('loggin out')
+
+  const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
+
   return (
-    <>
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-3">
-        <h1 className="text-white mx-2">HospitalityHub!</h1>
-        
+    <StyledContainer>
+      <StyledNavbar>
+        <h1>HospitalityHub!</h1>
         <div>
-        <Link to="/create">
-            <button className="btn btn-success mx-2">Add Booking</button>
+          <Link to="/create">
+            <StyledButton className="btn btn-success">Add Booking</StyledButton>
           </Link>
-          {/* <Link to='/user/bookedRooms'>
-          <button
-            className="btn btn-primary mx-2"
-          >
-            My Bookings
-          </button>
-          </Link> */}
-        
           <Link to="/rooms">
-            <button className="btn btn-success mx-2">All Rooms</button>
+            <StyledButton className="btn btn-success">All Rooms</StyledButton>
           </Link>
-        
-        <button className="btn btn-primary mx-2" onClick={handleLogout}>
-          LOGOUT
-        </button>
-         </div>
-      </nav>
-    <div className="container mt-5">
-      <h2 className="mb-4 text-center">My Bookings</h2>
-      <div className="row">
-        {bookings.map((booking) => (
-          <div key={booking._id} className="col-md-4 mb-4">
-            <div className="card h-100 shadow">
-              <div className="card-body">
-                <h5 className="card-title text-primary">Room Number: {booking.roomNumber}</h5>
-                <p className="card-text">Room Type: {booking.roomType}</p>
-                <p className="card-text">Start Time: {getDate(booking.startTime)}</p>
-                <p className="card-text">End Time: {getDate(booking.endTime)}</p>
-                <p className="card-text">Price: {booking.price} rupees</p>
+          <StyledButton className="btn btn-primary" onClick={handleLogout}>
+            LOGOUT
+          </StyledButton>
+        </div>
+      </StyledNavbar>
+      <StyledContent>
+        <StyledHeading>My Bookings</StyledHeading>
+        <StyledCardContainer>
+          {bookings.map((booking) => (
+            <StyledCard key={booking._id}>
+              <div>
+                <StyledCardTitle>Room Number: {booking.roomNumber}</StyledCardTitle>
+                <StyledCardText>Room Type: {booking.roomType}</StyledCardText>
+                <StyledCardText>Start Time: {getDate(booking.startTime)}</StyledCardText>
+                <StyledCardText>End Time: {getDate(booking.endTime)}</StyledCardText>
+                <StyledCardText>Price: {booking.price} rupees</StyledCardText>
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-    </>
+            </StyledCard>
+          ))}
+        </StyledCardContainer>
+      </StyledContent>
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled.div`
+  background: linear-gradient(to right, #4b6cb7, #182848);
+  min-height: 100vh;
+  color: white;
+`;
+
+const StyledNavbar = styled.nav`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #343a40;
+  padding: 0.5rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+
+    h1 {
+      margin-right: auto;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    button {
+      margin-left: 0.3rem;
+      margin-right: 0.3rem
+    }
+
+    button:first-child {
+      margin-left: 0;
+    }
+  }
+`;
+
+const StyledButton = styled.button`
+  margin-left: 0.5rem;
+`;
+
+const StyledContent = styled.div`
+  padding: 2rem;
+`;
+
+const StyledHeading = styled.h2`
+  text-align: center;
+  margin-bottom: 1.5rem;
+`;
+
+const StyledCardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
+
+const StyledCard = styled.div`
+  background: linear-gradient(to right, #007BFF, #ffc107);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  flex: 1 0 30%;
+  min-width: 300px;
+
+  &:hover {
+    transform: translateY(-4px);
+    transition: transform 0.3s ease-in-out;
+  }
+`;
+
+const StyledCardTitle = styled.h5`
+  color: white;
+`;
+
+const StyledCardText = styled.p`
+  margin: 0.5rem 0;
+`;
 
 export default MyBookings;
