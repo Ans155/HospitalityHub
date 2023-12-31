@@ -96,7 +96,7 @@ const ReqBookings = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#ff6666", padding: "20px" , minHeight: '100vh', color: 'white' }}>
+    <div style={{  background: "linear-gradient(to right, #0052D4, #65C7F7, #9CECFB)", padding: "20px" , minHeight: '100vh', color: 'white' }}>
      <nav
   style={{
     position: "fixed", 
@@ -289,6 +289,7 @@ const ReqBookings = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  
                 }}
               >
                 <h3 style={{ margin: "0" }}>Booking Details</h3>
@@ -318,6 +319,7 @@ const ReqBookings = () => {
                     backgroundColor: "#ffffff",
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                     marginBottom: "20px",
+                    borderRadius:'10px'
                   }}
                 >
                   <div
@@ -327,9 +329,10 @@ const ReqBookings = () => {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
+                      borderRadius:'10px'
                     }}
                   >
-                    <h3 style={{ margin: "0" }}>Booking Details</h3>
+                    <h3 style={{ margin: "0", color:'black'}}>Booking Details</h3>
                     <button
                       style={{
                         backgroundColor: "#dc3545",

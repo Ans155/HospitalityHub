@@ -2,92 +2,244 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { jwtDecode } from "jwt-decode";
 const RoomList = () => {
   const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState([]);
   const [filter, setFilter] = useState('');
   const token = localStorage.getItem('token');
-
-
+  const tokenDecoded = jwtDecode(token);
+  const userRole= tokenDecoded.role;
   useEffect(() => {
-    // Fetch the rooms from the server
     axios.get('https://hotelbackend-4phi.onrender.com/viewRoom/Rooms')
       .then(response => {
         setRooms(response.data);
-        setFilteredRooms(response.data); // Initialize filteredRooms with all rooms
+        setFilteredRooms(response.data);
       })
       .catch(error => {
-        console.error('Error fetching rooms:', error);
+        //console.error('Error fetching rooms:', error);
       });
-  }, []); // Empty dependency array means this effect will run once after the initial render
+  }, []);
 
   useEffect(() => {
-    // Apply filter when filter state changes
     if (filter) {
       const filtered = rooms.filter(room => room.roomType.toLowerCase() === filter.toLowerCase());
       setFilteredRooms(filtered);
     } else {
-      // If filter is empty, show all rooms
       setFilteredRooms(rooms);
     }
   }, [filter, rooms]);
-  const handleLogout =() => {
-    console.log('loggin out')
+
+  const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
+
   return (
     <>
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-3">
-        <h1 className="text-white mx-2">Welcome To HospitalityHub!</h1>
-        
-        <div>
-        <Link to="/create">
-            <button className="btn btn-success mx-2">Add Booking</button>
-          </Link>
-          <Link to='/user/bookedRooms'>
-          <button
-            className="btn btn-primary mx-2"
-          >
-            My Bookings
-          </button>
-          </Link>
-        
-        <button className="btn btn-primary mx-2" onClick={handleLogout}>
-          LOGOUT
-        </button>
-         </div>
-      </nav>
-    <div className="container mt-5">
-      <h2 className="mb-4">Room List</h2>
-      <div className="mb-3">
-        <label htmlFor="roomFilter" className="form-label">Filter by Room Type:</label>
-        <input
-          type="text"
-          id="roomFilter"
-          className="form-control"
-          placeholder="Enter room type"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-      </div>
-      <div className="row">
-        {filteredRooms.map((room, index) => (
-          <div key={room._id} className="col-md-4 mb-4">
-            <div className={`card ${index % 2 === 0 ? 'bg-primary' : 'bg-warning'}`} style={{ border: 'none', borderRadius: '10px', color: '#fff' }}>
-              <div className="card-body">
-                <h5 className="card-title">Room Number: {room.roomNumber}</h5>
-                <p className="card-text">Room Type: {room.roomType}</p>
-                <p className="card-text">Hourly Rate: ${room.hourlyRate}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+      <StyledContainer>
+        <nav
+  style={{
+    position: "fixed", 
+    top: "0",
+    left: "0", 
+    right: "0", 
+    backgroundColor: "#343a40",
+    color: "#ffffff",
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "10px 20px",
+    flexDirection: "column",
+    alignItems: "center", 
+    zIndex: "1000", 
+  }}
+>
+  <h1 style={{ margin: "0" }}>VIEW BOOKINGS</h1>
+  <div style={{ display: "flex", marginTop: "10px" }}>
+  <Link to="/dashboard">
+      <button
+        style={{
+          backgroundColor: "#28a745",
+          color: "#ffffff",
+          margin: "0 5px",
+          border: "none",
+          borderRadius: '10px',
+          padding: "5px 10px",
+          cursor: "pointer",
+        }}
+      >
+        Admin Dashboard
+      </button>
+    </Link>
+    <Link to="/create">
+      <button
+        style={{
+          backgroundColor: "#28a745",
+          color: "#ffffff",
+          margin: "0 5px",
+          border: "none",
+          borderRadius: '10px',
+          padding: "5px 10px",
+          cursor: "pointer",
+        }}
+      >
+        Add Booking
+      </button>
+    </Link>
+    <Link to="/requested">
+      <button
+        style={{
+          backgroundColor: "#28a745",
+          color: "#ffffff",
+          margin: "0 5px",
+          border: "none",
+          borderRadius: '10px',
+          padding: "5px 10px",
+          cursor: "pointer",
+        }}
+      >
+        Pending Booking
+      </button>
+    </Link>
+    <Link to="/view">
+      <button
+        style={{
+          backgroundColor: "#28a745",
+          color: "#ffffff",
+          margin: "0 5px",
+          border: "none",
+          borderRadius: '10px',
+          padding: "5px 10px",
+          cursor: "pointer",
+        }}
+      >
+        All Bookings
+      </button>
+    </Link>
+    <button
+      style={{
+        backgroundColor: "#007bff",
+        color: "#ffffff",
+        margin: "0 5px",
+        border: "none",
+        padding: "5px 10px",
+        cursor: "pointer",
+        borderRadius: '10px',
+      }}
+      onClick={handleLogout}
+    >
+      Logout
+    </button>
+  </div>
+</nav>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+        <StyledContent>
+          <h2>Room List</h2>
+          <StyledFilter>
+            <label htmlFor="roomFilter">Filter by Room Type:</label>
+            <input
+              type="text"
+              id="roomFilter"
+              className="form-control"
+              placeholder="Enter room type"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+          </StyledFilter>
+          <StyledRoomList>
+            {filteredRooms.map((room, index) => (
+              <StyledCard key={room._id} even={index % 2 === 0}>
+                <div>
+                  <h5>Room Number: {room.roomNumber}</h5>
+                  <p>Room Type: {room.roomType}</p>
+                  <p>Hourly Rate: ${room.hourlyRate}</p>
+                </div>
+              </StyledCard>
+            ))}
+          </StyledRoomList>
+        </StyledContent>
+      </StyledContainer>
     </>
   );
 };
+
+const StyledContainer = styled.div`
+  background: linear-gradient(to right, #4b6cb7, #182848);
+  min-height: 100vh;
+  color: white;
+`;
+
+const StyledNavbar = styled.nav`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #343a40;
+  padding: 0.5rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+
+    h1 {
+      margin-right: auto;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    button {
+      margin-left: 0.3rem;
+    }
+
+    button:first-child {
+      margin-left: 0;
+    }
+  }
+`;
+
+const StyledButton = styled.button`
+  margin: 0 0.5rem;
+`;
+
+const StyledContent = styled.div`
+  padding: 2rem;
+`;
+
+const StyledFilter = styled.div`
+  margin-bottom: 1rem;
+  label {
+    margin-right: 1rem;
+  }
+`;
+
+const StyledRoomList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+`;
+
+const StyledCard = styled.div`
+  background: ${({ even }) => (even ? 'linear-gradient(to right, #4b6cb7, #182848)' : 'linear-gradient(to right, #ff8008, #ffc837)')};
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  flex: 1 0 30%;
+  min-width: 300px;
+
+  &:hover {
+    transform: translateY(-4px);
+    transition: transform 0.3s ease-in-out;
+  }
+`;
 
 export default RoomList;
