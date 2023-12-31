@@ -1,16 +1,18 @@
+import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { toast } from "react-toastify";
+import styled from "styled-components";
 
-function BookingCard({ booking, page }) {
+const BookingCard = ({ booking, page }) => {
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
   const userRole = decodedToken.role;
 
-  function getDate(date) {
+  const getDate = (date) => {
     const options = {
       weekday: "long",
       year: "numeric",
@@ -19,7 +21,7 @@ function BookingCard({ booking, page }) {
     };
     const newDate = new Date(date);
     return newDate.toLocaleDateString("en-US", options);
-  }
+  };
 
   const newPrice = booking.price.toLocaleString("en-IN", {
     maximumFractionDigits: 2,
@@ -35,11 +37,11 @@ function BookingCard({ booking, page }) {
       headers: {
         "Content-Type": "application/json",
       },
+      data: { userRole },
     };
 
     axios(config)
       .then(function (response) {
-        console.log(JSON.stringify(response.data));
         if (response.data._id !== undefined) {
           toast.success("Booking Confirmed and Confirmation email sent!");
         } else toast.error("Booking Failed");
@@ -50,48 +52,86 @@ function BookingCard({ booking, page }) {
   };
 
   return (
-    <Card className="w-100 mb-4">
+    <StyledCard className="w-100 mb-4">
       <Card.Body>
         <div className="row">
           <div className="col-md-6">
-            <Card.Title>{`Room Number: ${booking.roomNumber}`}</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">
-              {`User's Email: ${booking.userEmail}`}
-            </Card.Subtitle>
-            <Card.Text>
+            <CardTitle>{`Room Number: ${booking.roomNumber}`}</CardTitle>
+            <CardSubtitle>{`User's Email: ${booking.userEmail}`}</CardSubtitle>
+            <CardText>
               <strong>Price: </strong>
               {`${newPrice}`}
-            </Card.Text>
+            </CardText>
           </div>
           <div className="col-md-6">
-            <Card.Text>
+            <CardText>
               <strong>Booking Start Date: </strong>
               {`${getDate(booking.startTime)}`}
-            </Card.Text>
-            <Card.Text>
+            </CardText>
+            <CardText>
               <strong>Booking End Date: </strong>
               {`${getDate(booking.endTime)}`}
-            </Card.Text>
-            <Card.Text>
+            </CardText>
+            <CardText>
               <strong>Status: </strong>
               {`${booking.status}`}
-            </Card.Text>
+            </CardText>
             {userRole === 'admin' && page === 'requested' ? (
-              <Button variant="success" onClick={() => handleConfirm(booking.bookingId)}>
+              <StyledButton variant="success" onClick={() => handleConfirm(booking.bookingId)}>
                 Confirm Booking
-              </Button>
+              </StyledButton>
             ) : (
               <Link to="/update" state={booking}>
-                <Button variant="secondary" className="mr-auto">
+                <StyledButton variant="secondary" className="mr-auto">
                   Update
-                </Button>
+                </StyledButton>
               </Link>
             )}
           </div>
         </div>
       </Card.Body>
-    </Card>
+    </StyledCard>
   );
-}
+};
+
+const StyledCard = styled(Card)`
+  background: linear-gradient(135deg, #3494e6, #ec6ead);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const CardTitle = styled(Card.Title)`
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+`;
+
+const CardSubtitle = styled(Card.Subtitle)`
+  font-size: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const CardText = styled(Card.Text)`
+  font-size: 1rem;
+`;
+
+const StyledButton = styled(Button)`
+  background-color: #28a745;
+  border-color: #28a745;
+  margin-top: 1rem;
+
+  &:hover,
+  &:focus {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+`;
 
 export default BookingCard;

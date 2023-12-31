@@ -11,7 +11,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [mode, setMode] = useState('login');
   const handleDefaultAdminAccess = () => {
-    // Set default admin email and password
     setEmail('admin@example.com');
     setPassword('adminpassword');
   };
@@ -26,7 +25,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://hotelbackend-4phi.onrender.com/auth/login', {
+      const response = await axios.post('http://127.0.0.1:5000/auth/login', {
         userEmail: email,
         password: password,
       });
@@ -37,16 +36,16 @@ const Login = () => {
       localStorage.setItem('token', token);
       const decodedToken = jwtDecode(token);
       const userRole = decodedToken.role;
-      console.log(userRole);
+      //console.log(userRole);
       if(userRole==='admin')
       {
-        navigate('/view')
+        navigate('/dashboard')
       }
       else
       navigate('/create');
     } catch (error) {
       toast.error('Login failed');
-      console.error('Login error:', error.response.data);
+     // console.error('Login error:', error.response.data);
     }
   };
 
