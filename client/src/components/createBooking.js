@@ -220,17 +220,6 @@ const BookingForm = () => {
     </nav>
 
       <StyledContent>
-      <StyledCarouselContainer>
-          <Slider {...carouselSettings}>
-            {carouselImages.map((image, index) => (
-              <StyledCarouselItem key={index}>
-                <img src={image} alt={`Image ${index + 1}`} />
-              </StyledCarouselItem>
-            ))}
-          </Slider>
-        </StyledCarouselContainer>
-        <br/>
-        <br/>
         <StyledFormContainer>
           <StyledForm onSubmit={handleSubmit}>
             <Form.Group controlId="formBasicEmail">
@@ -319,6 +308,16 @@ const BookingForm = () => {
             </Button>
           </StyledForm>
         </StyledFormContainer>
+
+        <StyledCarouselContainer>
+          <Slider {...carouselSettings}>
+            {carouselImages.map((image, index) => (
+              <StyledCarouselItem key={index}>
+                <img src={image} alt={`Image ${index + 1}`} />
+              </StyledCarouselItem>
+            ))}
+          </Slider>
+        </StyledCarouselContainer>
       </StyledContent>
         
         

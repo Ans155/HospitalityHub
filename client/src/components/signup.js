@@ -4,14 +4,19 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import backgroundImg from '../images/image10.jfif'
 const Signup = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [mode, setMode] = useState('signup');
-
+  const backgroundImageStyle = {
+    backgroundImage: `url(${backgroundImg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    minHeight: '100vh',
+  };
   const toggleMode = () => {
     setMode((prevMode) => (prevMode === 'signup' ? 'login' : 'signup'));
   };
@@ -43,7 +48,7 @@ const Signup = () => {
   };
 
   return (
-    <div>
+    <div style={backgroundImageStyle}>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-3">
       <h1 className="navbar-brand">Welcome To HospitalityHub!</h1>
       </nav>

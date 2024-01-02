@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { jwtDecode } from 'jwt-decode';
+import backgroundImg from '../images/banner.jpg'
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -25,7 +26,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/auth/login', {
+      const response = await axios.post('https://hotelbackend-4phi.onrender.com/auth/login', {
         userEmail: email,
         password: password,
       });
@@ -48,9 +49,15 @@ const Login = () => {
      // console.error('Login error:', error.response.data);
     }
   };
+  const backgroundImageStyle = {
+    backgroundImage: `url(${backgroundImg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    minHeight: '100vh',
+  };
 
   return (
-    <div>
+    <div style={backgroundImageStyle}>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-around mb-4">
       <h1 className="navbar-brand">Welcome To HospitalityHub!</h1>
       </nav>
