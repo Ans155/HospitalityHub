@@ -23,6 +23,7 @@ app.use(cors({
   origin: 'https://hospitalityhub.netlify.app',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
+  allowedHeaders: 'Content-Type,Authorization',
 }));
 
 app.use(express.json({ extended: false }));
