@@ -5,6 +5,7 @@ const connectDB = async () => {
         await mongoose.connect('mongodb+srv://anshchoudhary155:anvi2701@cluster0.o4ryywg.mongodb.net/', {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            poolSize: 10,
         });
 
         console.log("MongoDB is connected");
