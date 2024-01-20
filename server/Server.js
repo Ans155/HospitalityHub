@@ -49,7 +49,7 @@ app.listen(PORT, () => {
 
 setInterval(() => {
   const axios = require('axios');
-  axios.get('https://your-backend-url/keep-alive')
+  axios.get('https://hospitalityhub.netlify.app/keep-alive')
     .then(response => {
       console.log(response.data);
     })
