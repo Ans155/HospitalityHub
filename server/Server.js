@@ -38,7 +38,22 @@ app.use('/user', userRoute);
 app.use('/filter', filterRoute);
 app.use('/stats', statRoute);
 
+app.get('/keep-alive', (req, res) => {
+  res.status(200).send('Server is alive');
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+setInterval(() => {
+  const axios = require('axios');
+  axios.get('https://your-backend-url/keep-alive')
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error('Error pinging keep-alive endpoint:', error.message);
+    });
+}, 300000);
