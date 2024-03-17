@@ -7,6 +7,7 @@ const createController = require('../controllers/createController');
  * @description Book a room
  * @access public
  */
+
 router.post('/', createController.bookRoom);
 router.post('/:bookingId/validate', createController.validateBooking);
 
