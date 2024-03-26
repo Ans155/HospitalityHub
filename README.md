@@ -71,18 +71,17 @@ When a user successfully books a room, a confirmation email is automatically sen
 # Installation
 Clone the repository:
 ```bash
-Copy code
-git clone https://github.com/your-username/hotel-room-management-app.git
-cd hotel-room-management-app
+git clone https://github.com/Ans155/HospitalityHub.git
+cd HospitalityHub
 ```
 Install dependencies for the client and server:
 
 ```bash
-Copy code
 cd client
 npm install
-cd ../server
+cd server
 npm install
+```
 Set up the MongoDB database:
 
 Create a MongoDB database and configure the connection string in server/config/db.js.
@@ -92,7 +91,6 @@ In the client directory, run npm start to start the React app.
 In the server directory, run npm start to start the Node.js server.
 Access the app in your browser at http://localhost:3000.
 
-```
 
 **Resources**
 -----------------------
