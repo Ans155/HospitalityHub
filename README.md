@@ -15,6 +15,9 @@ This project is a comprehensive solution for managing rooms in a hotel, offering
 ## Database
 - MongoDB
 
+## Admin Dashboard :
+![image](https://github.com/Ans155/HospitalityHub/assets/110165397/f7393a19-0534-4cb7-a8fb-e3f6c364913d)
+
 ### Key Functionalities
 
 #### User Features:
@@ -22,6 +25,7 @@ This project is a comprehensive solution for managing rooms in a hotel, offering
 1. **User Authentication:**
    - Users can securely log in or sign up using JSON Web Token (JWT) authentication.
    - Two roles are supported: CUSTOMER and ADMIN.
+![image](https://github.com/Ans155/HospitalityHub/assets/110165397/03f17e3f-0263-4c98-a0d9-49662b3196d2)
 
 2. **Role-Based Access:**
    - Different roles have different access levels.
@@ -35,6 +39,7 @@ This project is a comprehensive solution for managing rooms in a hotel, offering
    - Customers can book rooms by providing necessary details such as name, email, room preferences, start time, and end time.
    - The price of the booking updates dynamically as customers modify any booking details.
    - Overlapping bookings for the same room are not allowed.
+![image](https://github.com/Ans155/HospitalityHub/assets/110165397/db1a655a-cfda-4700-befa-0e282da2ec34)
 
 4. **Editing Bookings:**
    - Customers can edit their booking details, including personal information and reservation details.
@@ -51,6 +56,9 @@ This project is a comprehensive solution for managing rooms in a hotel, offering
    - Admins can view all bookings, both upcoming and passed, with various filters:
      - Filter by room number and room type.
      - Filter by start time and end time.
+![image](https://github.com/Ans155/HospitalityHub/assets/110165397/aa28417a-4029-4d47-8e07-823148ea65d7)
+![image](https://github.com/Ans155/HospitalityHub/assets/110165397/afec5cdf-0ea2-4870-957f-e3d53753c64e)
+
 
 ## Email Confirmation Feature
 
