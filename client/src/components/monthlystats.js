@@ -8,11 +8,12 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const MonthlyStats = () => {
   const [monthlyData, setMonthlyData] = useState([]);
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     const fetchMonthlyStats = async () => {
       try {
-        const response = await axios.get('https://hotelbackend-4phi.onrender.com/stats'); // Update the API endpoint
+        const response = await axios.get(`${backendUrl}/stats`); // Update the API endpoint
         const data = response.data;
         setMonthlyData(data.monthlyStats);
       } catch (error) {

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { jwtDecode } from "jwt-decode";
 const RoomList = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
   const [filteredRooms, setFilteredRooms] = useState([]);
@@ -13,7 +14,7 @@ const RoomList = () => {
   const tokenDecoded = jwtDecode(token);
   const userRole= tokenDecoded.role;
   useEffect(() => {
-    axios.get('https://hospitality-j2g13xe98-ans155s-projects.vercel.app/viewRoom/Rooms')
+    axios.get(`${backendUrl}/viewRoom/Rooms`)
       .then(response => {
         setRooms(response.data);
         setFilteredRooms(response.data);

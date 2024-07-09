@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const MyBookings = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
@@ -25,7 +26,7 @@ const MyBookings = () => {
 
   useEffect(() => {
     axios
-      .get(`https://hotelbackend-4phi.onrender.com/user/${userEmail}/bookedRooms`)
+      .get(`${backendUrl}/user/${userEmail}/bookedRooms`)
       .then((response) => {
         setBookings(response.data);
       })

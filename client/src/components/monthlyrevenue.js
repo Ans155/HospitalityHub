@@ -7,11 +7,12 @@ ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement);
 
 const MonthlyRevenueChart = () => {
   const [monthlyStats, setMonthlyStats] = useState([]);
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://hotelbackend-4phi.onrender.com/stats'); // Replace with your API endpoint
+        const response = await axios.get(`${backendUrl}/stats`); // Replace with your API endpoint
         const data = response.data;
 
         // Assuming the API returns an object with monthlyStats property

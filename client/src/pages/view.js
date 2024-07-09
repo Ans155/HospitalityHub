@@ -17,7 +17,7 @@ const Bookings = () => {
     const newDate = new Date(date);
     return newDate.toISOString().slice(0, 16);
   }
-
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem("token");
   const tokenDecoded = jwtDecode(token);
   const userRole= tokenDecoded.role;
@@ -47,7 +47,7 @@ const Bookings = () => {
 
   useEffect(() => {
     axios
-      .get("https://hotelbackend-4phi.onrender.com/view/bookings", {
+      .get(`${backendUrl}/view/bookings`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -60,7 +60,7 @@ const Bookings = () => {
   const handleDelete = (id) => {
     if (window.confirm("Do you want to continue delete the booking")) {
       axios
-        .delete(`https://hotelbackend-4phi.onrender.com/delete/${id}`, {
+        .delete(`${backendUrl}/delete/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -90,7 +90,7 @@ const Bookings = () => {
 
  
     axios
-      .post("https://hotelbackend-4phi.onrender.com/filter/bookings", formattedFilterData)
+      .post(`${backendUrl}/filter/bookings`, formattedFilterData)
       .then((response) => {
         setBookings(response.data); 
         setShowFilterModal(false); 

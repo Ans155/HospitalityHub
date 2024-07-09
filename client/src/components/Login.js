@@ -8,6 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 import backgroundImg from '../images/banner.jpg'
 const Login = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  // console.log(backendUrl)
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +28,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`https://hospitality-hub-rho.vercel.app/auth/login`, {
+      const response = await axios.post(`${backendUrl}/auth/login`, {
         userEmail: email,
         password: password,
       });

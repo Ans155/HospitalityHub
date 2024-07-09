@@ -21,6 +21,7 @@ import p7 from "../images/image11.jfif";
 import p8 from "../images/image12.jfif";
 import p9 from "../images/image13.jfif";
 const UpdatingForm = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('token');
   const [pricePerHour, setPricePerHour] = useState(0);
   const id = useLocation().state.bookingId;
@@ -113,7 +114,7 @@ const UpdatingForm = () => {
   };
 
   useEffect(() => {
-    axios.get("https://hotelbackend-4phi.onrender.com/viewRoom/Rooms", {headers: {
+    axios.get(`${backendUrl}/viewRoom/Rooms`, {headers: {
       Authorization: `Bearer ${token}`,
     },}).then((response) => {
       setRooms(response.data);
@@ -142,7 +143,7 @@ const UpdatingForm = () => {
     var config = {
       method: "put",
       maxBodyLength: Infinity,
-      url: `https://hotelbackend-4phi.onrender.com/edit/${id}`,
+      url: `${backendUrl}/edit/${id}`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
