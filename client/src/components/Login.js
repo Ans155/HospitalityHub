@@ -27,7 +27,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${backendUrl}/auth/login`, {
+      const response = await axios.post(`https://hospitality-hub-rho.vercel.app/auth/login`, {
         userEmail: email,
         password: password,
       });

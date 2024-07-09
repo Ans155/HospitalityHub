@@ -3,8 +3,6 @@ const express = require('express');
 const router = express.Router();
 const Booking = require('../model/Booking');
 
-Booking.collection.createIndex({ userEmail: 1 });
-
 
 exports.userBookings = async (req, res) => {
     try {
