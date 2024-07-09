@@ -22,6 +22,7 @@ import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 
 const BookingForm = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('token');
   const [pricePerHour, setPricePerHour] = useState(0);
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ const BookingForm = () => {
 
   useEffect(() => {
     axios
-      .get("https://hotelbackend-4phi.onrender.com/viewRoom/Rooms", {
+      .get(`${backendUrl}/viewRoom/Rooms`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -133,7 +134,7 @@ const BookingForm = () => {
     var config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "https://hotelbackend-4phi.onrender.com/create",
+      url: `${backendUrl}/create`,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

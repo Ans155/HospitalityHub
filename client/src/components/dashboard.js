@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from 'react-toastify';
 
 const Dashboard = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const token=localStorage.getItem('token');
   const tokenDecoded = jwtDecode(token);
   const userRole= tokenDecoded.role;
@@ -39,7 +40,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://hotelbackend-4phi.onrender.com/stats');
+        const response = await axios.get(`${backendUrl}/stats`);
         const data = response.data;
         setTotalUsers(data.totalUsers);
         setTotalBookings(data.totalBookings);

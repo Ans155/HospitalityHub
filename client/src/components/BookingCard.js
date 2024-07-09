@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 
 const BookingCard = ({ booking, page }) => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
   const userRole = decodedToken.role;
@@ -33,7 +34,7 @@ const BookingCard = ({ booking, page }) => {
     const config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: `https://hotelbackend-4phi.onrender.com/create/${id}/validate`,
+      url: `${backendUrl}/create/${id}/validate`,
       headers: {
         "Content-Type": "application/json",
       },

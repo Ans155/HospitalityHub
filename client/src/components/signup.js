@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import backgroundImg from '../images/image10.jfif'
 const Signup = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,7 +34,7 @@ const Signup = () => {
       //   return;
       // }
       console.log(email,password)
-      const response = await axios.post('https://hotelbackend-4phi.onrender.com/auth/signup', {
+      const response = await axios.post(`${backendUrl}/auth/signup`, {
         userEmail: email,
         password: password,
       });

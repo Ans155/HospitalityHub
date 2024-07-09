@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { jwtDecode } from 'jwt-decode';
 import backgroundImg from '../images/banner.jpg'
 const Login = () => {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,7 +27,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://hotelbackend-4phi.onrender.com/auth/login', {
+      const response = await axios.post(`${backendUrl}/auth/login`, {
         userEmail: email,
         password: password,
       });
