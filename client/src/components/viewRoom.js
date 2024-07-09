@@ -13,7 +13,7 @@ const RoomList = () => {
   const tokenDecoded = jwtDecode(token);
   const userRole= tokenDecoded.role;
   useEffect(() => {
-    axios.get('https://hotelbackend-4phi.onrender.com/viewRoom/Rooms')
+    axios.get('https://hospitality-j2g13xe98-ans155s-projects.vercel.app/viewRoom/Rooms')
       .then(response => {
         setRooms(response.data);
         setFilteredRooms(response.data);

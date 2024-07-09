@@ -12,7 +12,6 @@ import MyBookings from './components/MyBookings';
 import Dashboard from './components/dashboard';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import PrivateRoute from './PrivateRoute';
 
 function App() {
   return (

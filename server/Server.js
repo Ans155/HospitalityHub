@@ -20,7 +20,7 @@ require("dotenv").config();
 connectDB();
 
 app.use(cors({
-  origin: 'https://hospitalityhub.netlify.app',
+  origin: "http://localhost:3001/",
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   allowedHeaders: 'Content-Type,Authorization',
